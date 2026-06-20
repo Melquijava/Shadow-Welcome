@@ -11,6 +11,7 @@ const requiredVariables = [
   'TOKEN',
   'WELCOME_CHANNEL_ID',
   'HOW_TO_PLAY_CHANNEL_ID',
+  'RULES_CHANNEL_ID',
 ];
 
 const missingVariables = requiredVariables.filter(
@@ -87,10 +88,10 @@ client.on('guildMemberAdd', async (member) => {
 
     const welcomeEmoji = await getWelcomeEmoji(member.guild);
     const message = [
-      `${welcomeEmoji} Seja Bem-Vindo(a) ${member} à Shadow Apostas.`,
+      `## Seja Bem-Vindo(a) ${member} à Shadow Apostas.`,
       '',
-      `➤ Como Jogar? <#${process.env.HOW_TO_PLAY_CHANNEL_ID}>`,
-      '➤ Faça seu registro e comece suas apostas.',
+      `${welcomeEmoji} Como Jogar? <#${process.env.HOW_TO_PLAY_CHANNEL_ID}>`,
+      `${welcomeEmoji} Leia as <#${process.env.RULES_CHANNEL_ID}> e comece suas apostas.`,
     ].join('\n');
 
     await welcomeChannel.send({
