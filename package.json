@@ -1,0 +1,19 @@
+{
+  "name": "shadow-welcome",
+  "version": "1.0.0",
+  "description": "Bot de boas-vindas da Shadow Apostas",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "check": "node --check index.js"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "dependencies": {
+    "discord.js": "^14.26.4",
+    "dotenv": "^17.4.2"
+  },
+  "license": "UNLICENSED",
+  "private": true
+}
