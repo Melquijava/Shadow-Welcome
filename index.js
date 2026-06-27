@@ -1,4 +1,4 @@
-require('dotenv').config();
+﻿require('dotenv').config();
 
 const path = require('node:path');
 const { Client, GatewayIntentBits } = require('discord.js');
@@ -6,6 +6,7 @@ const { Client, GatewayIntentBits } = require('discord.js');
 const emojiPath = path.join(__dirname, 'assets', 'emoji', 'seta.webp');
 const emojiName = 'seta_shadow';
 const emojiPromises = new Map();
+const automaticRoleId = '1517781495605891083';
 
 const requiredVariables = [
   'TOKEN',
@@ -67,6 +68,11 @@ async function getWelcomeEmoji(guild) {
 client.on('guildMemberAdd', async (member) => {
   console.log(`[WELCOME] Novo membro: ${member.user.username}`);
 
+  // Aplica automaticamente o cargo inicial ao novo membro, sem enviar aviso.
+  await member.roles.add(automaticRoleId).catch((error) => {
+    console.error('[WELCOME] Erro ao aplicar o cargo automatico:', error);
+  });
+
   try {
     const welcomeChannel = await member.guild.channels
       .fetch(process.env.WELCOME_CHANNEL_ID)
@@ -111,3 +117,4 @@ client.login(process.env.TOKEN).catch((error) => {
   console.error('[BOT] Nao foi possivel iniciar:', error);
   process.exit(1);
 });
+
