@@ -1,7 +1,7 @@
 ﻿require('dotenv').config();
 
 const path = require('node:path');
-const { Client, GatewayIntentBits } = require('discord.js');
+const { Client, GatewayIntentBits, ActivityType } = require('discord.js');
 
 const emojiPath = path.join(__dirname, 'assets', 'emoji', 'seta.webp');
 const emojiName = 'seta_shadow';
@@ -31,8 +31,20 @@ const client = new Client({
   intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMembers],
 });
 
+function updateMemberStatus() {
+  const memberCount = client.guilds.cache.reduce(
+    (total, guild) => total + (guild.memberCount ?? 0),
+    0,
+  );
+
+  client.user.setActivity(`${memberCount} membros apostando`, {
+    type: ActivityType.Watching,
+  });
+}
+
 client.once('ready', (readyClient) => {
   console.log(`[BOT] Online como ${readyClient.user.tag}`);
+  updateMemberStatus();
 });
 
 // Localiza ou cria no servidor o emoji salvo em assets/emoji/seta.webp.
@@ -67,6 +79,7 @@ async function getWelcomeEmoji(guild) {
 
 client.on('guildMemberAdd', async (member) => {
   console.log(`[WELCOME] Novo membro: ${member.user.username}`);
+  updateMemberStatus();
 
   // Aplica automaticamente o cargo inicial ao novo membro, sem enviar aviso.
   await member.roles.add(automaticRoleId).catch((error) => {
@@ -109,6 +122,10 @@ client.on('guildMemberAdd', async (member) => {
   }
 });
 
+client.on('guildMemberRemove', () => {
+  updateMemberStatus();
+});
+
 client.on('error', (error) => {
   console.error('[DISCORD] Erro no cliente:', error);
 });
@@ -117,4 +134,5 @@ client.login(process.env.TOKEN).catch((error) => {
   console.error('[BOT] Nao foi possivel iniciar:', error);
   process.exit(1);
 });
+
 
